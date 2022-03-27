@@ -1,5 +1,3 @@
-import { faker } from "@faker-js/faker";
-
 function Criminal({ id, criminal }) {
   return (
     <table
@@ -9,7 +7,7 @@ function Criminal({ id, criminal }) {
       <tbody>
         <tr>
           <td rowSpan="5">
-            <img src={faker.image.avatar()} alt="from faker" />
+            <img src={criminal.img} alt="criminal face" />
           </td>
           <td>Criminal Name</td>
           <td>{criminal.name.toUpperCase()}</td>
