@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormData from "form-data";
 import axios from "axios";
 import "../css/login.css";
@@ -10,6 +10,20 @@ function AddCriminal({ api }) {
   const [file, setFile] = useState(null);
   const [criminal, setCriminal] = useState({});
   const [loader, setLoader] = useState(false);
+  const [criminal_id, setCriminalID] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get(`${api}/criminal`, {
+        headers: {
+          authorization: `bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
+      const { data } = res.data;
+      setCriminalID(`CRMS${(data.length + 1).toString().padStart(3, 0)}`);
+      // return data.length;
+    })();
+  });
 
   const addCriminal = (e) => {
     e.preventDefault();
@@ -18,6 +32,7 @@ function AddCriminal({ api }) {
 
     // console.log(file);
     const data = new FormData();
+    data.append("criminal_id", criminal_id);
     data.append("file", file);
 
     // console.log(Object.entries(criminal).length);
@@ -30,8 +45,6 @@ function AddCriminal({ api }) {
         "Content-Type": "multipart/form-data",
         headers: {
           authorization: `bearer ${sessionStorage.getItem("token")}`,
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         },
       })
       .then((res) => {
@@ -86,17 +99,33 @@ function AddCriminal({ api }) {
         {/* onSubmit={submit} */}
         <div className="container">
           <form className="row g-3" onSubmit={addCriminal}>
-            <div className="col-md-6 offset-md-3 mb-5">
-              <div className="passport-holder">
-                <img src="/idp.jpg" alt="" />
+            <div className="row align-items-center mb-5">
+              <div className="col-md-6">
+                <div className="passport-holder">
+                  <img src="/idp.jpg" alt="" />
+                  <input
+                    type="file"
+                    name="file"
+                    className="form-control"
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="name" className="form-label">
+                  Criminal ID
+                </label>
                 <input
-                  type="file"
+                  disabled
+                  type="text"
                   name="file"
-                  className="form-control"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  className="form-control my-auto my-auto"
+                  value={criminal_id ? criminal_id : ""}
                 />
               </div>
             </div>
+
             <div className="row">
               <div className="col-md-3">
                 <label htmlFor="name" className="form-label">
