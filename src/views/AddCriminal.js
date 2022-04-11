@@ -30,6 +30,8 @@ function AddCriminal({ api }) {
         "Content-Type": "multipart/form-data",
         headers: {
           authorization: `bearer ${sessionStorage.getItem("token")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         },
       })
       .then((res) => {
