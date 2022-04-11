@@ -1,45 +1,52 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Navigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 import "../css/login.css";
-function Login({ setUser }) {
+function Login({ api }) {
   const [login, setLogin] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [iserror, setIserror] = useState(false);
+
+  useEffect((_) => {
+    if (pathname === "/logout" && sessionStorage.getItem("token")) {
+      sessionStorage.clear();
+      return navigate("/");
+    } else if (pathname === "/logout" && !sessionStorage.getItem("token"))
+      return navigate("/");
+
+    if (sessionStorage.getItem("token") && pathname === "/")
+      return navigate("/dashboard");
+  });
 
   const submit = async (e) => {
     e.preventDefault();
 
-    let res = await axios.post(
-      "https://crms-api.herokuapp.com/api/v1/user/login",
-      login
-    );
-    res = await res.data;
-    sessionStorage.setItem("token", res.token);
-    sessionStorage.setItem("_id", res._id);
-    setUser(true);
+    // validation
 
-    if (sessionStorage.getItem("token").length !== 0) {
-      setUser(true);
-      return navigate("/");
+    if (login.username === "") {
+      document.querySelector("#username").classList.add("error");
+      return;
+    } else if (login.password === "") {
+      document.querySelector("#password").classList.add("error");
+      return;
+    }
+
+    try {
+      let res = await axios.post(`${api}/user/login`, login);
+      res = await res.data;
+      sessionStorage.setItem("token", res.token);
+      sessionStorage.setItem("_id", res._id);
+    } catch (err) {
+      setLogin({ username: "", password: "" });
+      setIserror(true);
+    }
+
+    if (sessionStorage.getItem("token")) {
+      return navigate("/dashboard");
     }
   };
-
-  if (sessionStorage.getItem("token") && pathname === "/logout") {
-    sessionStorage.clear();
-    setUser(false);
-  } else {
-    if (sessionStorage.getItem("token") && pathname === "/login") setUser(true);
-  }
-
-  useEffect((_) => {
-    if (pathname === "/logout" && !sessionStorage.getItem("token")) {
-      return navigate("/login");
-    }
-    if (sessionStorage.getItem("token") && pathname === "/login")
-      return navigate("/");
-  });
 
   return (
     <div className="content">
@@ -56,6 +63,11 @@ function Login({ setUser }) {
                     Sign In to <strong>CRMS</strong>
                   </h3>
                   <p className="mb-4">Crime Managemen System</p>
+                  {iserror ? (
+                    <p className="text-center text-danger">
+                      Invalid credential
+                    </p>
+                  ) : null}
                 </div>
                 <form method="post" onSubmit={submit}>
                   <div className="form-group first">
@@ -65,9 +77,11 @@ function Login({ setUser }) {
                       id="username"
                       name="username"
                       placeholder="Username"
-                      onChange={(e) =>
-                        setLogin({ ...login, username: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setLogin({ ...login, username: e.target.value });
+                        e.target.classList.remove("error");
+                      }}
+                      value={login.username ? login.username : ""}
                     />
                   </div>
                   <div className="form-group last mb-4">
@@ -80,6 +94,7 @@ function Login({ setUser }) {
                       onChange={(e) =>
                         setLogin({ ...login, password: e.target.value })
                       }
+                      value={login.password ? login.password : ""}
                     />
                   </div>
 

@@ -10,7 +10,7 @@ function Navbar({ type }) {
     window.addEventListener("scroll", function () {
       if (window.scrollY > 50) {
         nav.classList.add("border-bottom");
-        const navbar_height = document.querySelector(".navbar").offsetHeight;
+        // const navbar_height = document.querySelector(".navbar").offsetHeight;
         // document.body.style.paddingTop = navbar_height + "px";
       } else {
         nav.classList.remove("border-bottom");
@@ -20,7 +20,7 @@ function Navbar({ type }) {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-      <div className="container">
+      <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <span className="text-success display-6">
             <img src="/prison.png" width="50" height="50" alt="logo" /> CRMS
@@ -40,7 +40,7 @@ function Navbar({ type }) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <div className="me-auto mb-2 mb-lg-0"></div>
           <div className="d-flex">
-            <Menu type={type} />
+            <Menu />
           </div>
         </div>
       </div>

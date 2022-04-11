@@ -7,7 +7,7 @@ p {
   padding: 7rem 0;
   width: 100%;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .content .contents .form-group input {
@@ -53,10 +53,14 @@ p {
     position: absolute;
     top: 0;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
   }
 }
 
 .contents {
   align-self: center;
+}
+
+.error {
+  border-bottom: 1px solid red !important;
 }

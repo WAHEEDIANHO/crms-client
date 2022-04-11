@@ -1,67 +1,58 @@
 // import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Menu({ type }) {
+function Menu() {
   // const [token, setToken] = useState(() =>
   // sessionStorage.getItem("token") ? sessionStorage.getItem("token") : ""
   // );
 
-  const generalMenu = [
-    { title: "HOME", path: "/" },
-    { title: "ALL CRIMINALS", path: "/criminals" },
-    { title: type ? "LOGOUT" : "LOGIN", path: type ? "/logout" : "login" },
-    { title: "CONTACT US", path: "/contact" },
-  ];
-
-  const adminMenu = [
-    ...generalMenu,
-    { title: "DASHBOARD", path: "/dashboard" },
+  const menu = [
+    { title: "FILE", path: "/" },
     {
-      title: "ADMINISTRATION",
+      title: "SET UP",
       path: "#",
       role: [
-        { title: "ADD POLICE", path: "/add_police" },
-        { title: "ADD CRIME", path: "/add_crime" },
-        { title: "ADD CRIMINAL", path: "/add_criminal" },
-        { title: "ADD COURT", path: "/add_court" },
-        { title: "ADD PRISON", path: "/add_prison" },
+        { title: "NEW USER", path: "/dashboard/add-user" },
+        { title: "CRIME", path: "/dashboard/add_criminal" },
+      ],
+    },
+    {
+      title: sessionStorage.getItem("token") ? "LOGOUT" : "LOGIN",
+      path: sessionStorage.getItem("token") ? "/logout" : "/",
+    },
+    {
+      title: "OPERATION",
+      path: "#",
+      role: [
+        {
+          title: "STAFF",
+          path: "/dashboard/add-user",
+          isInnerRole: true,
+          inner_role: [
+            { title: "ADD STAFF", path: "/dashboard/add-staff" },
+            { title: "STAFF", path: "/dashboard/staff" },
+          ],
+        },
+        {
+          title: "CRIMINALS",
+          path: "",
+          isInnerRole: true,
+          inner_role: [
+            { title: "ADD CRIMINAL", path: "/dashboard/add_criminal" },
+            { title: "CRIMINALS", path: "/dashboard/criminal" },
+          ],
+        },
       ],
     },
     {
       title: "REPORT",
-      path: "/report",
-      role: [
-        { title: "CRIME REPORT", path: "/crime" },
-        { title: "CRIMINAL REPORT", path: "criminal" },
-        { title: "COURT REPORT", path: "/court" },
-        { title: "PRISON REPORT", path: "/prison" },
-        { title: "COURT REPORT", path: "/court" },
-      ],
-    },
-    { title: "CHANGE PASSWORD", path: "/change_password" },
-  ];
-
-  const policeMenu = [
-    ...generalMenu,
-    { title: "DASHBOARD", path: "/dashboard" },
-    { title: "MY ACCOUNT", path: "#" },
-    {
-      title: "ADMINISTRATION",
       path: "#",
       role: [
-        { title: "ADD CRIME", path: "/add_crime" },
-        { title: "ADD CRIMINAL", path: "/add_criminal" },
+        { title: "STAFF", path: "/dashboard/staff_report" },
+        { title: "CRIMINALS", path: "/dashboard/criminals_report" },
       ],
     },
-    {
-      title: "REPORT",
-      path: "/report",
-      role: [
-        { title: "CRIME REPORT", path: "/crime" },
-        { title: "CRIMINAL REPORT", path: "criminal" },
-      ],
-    },
-    { title: "CHANGE PASSWORD", path: "/change_password" },
+    { title: "ABOUT", path: "/change_password" },
   ];
 
   const getDisplayMenu = (menuType) => {
@@ -81,10 +72,24 @@ function Menu({ type }) {
             </Link>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
               {el.role.map((el, i) => (
-                <li key={i}>
-                  <Link className="dropdown-item" to={el.path}>
+                <li className="dropdown-item" key={i}>
+                  <Link className="nav-link" to={el.path}>
                     {el.title}
                   </Link>
+                  {el.isInnerRole ? (
+                    <ul
+                      className="dropdown-menu dropdown-submenu"
+                      aria-labelledby="navbarDropdown"
+                    >
+                      {el.inner_role.map((el, i) => (
+                        <li className="dropdown-item" key={i}>
+                          <Link to={el.path} className="nav-link">
+                            {el.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -102,25 +107,9 @@ function Menu({ type }) {
     });
   };
 
-  const navigation = (type) => {
-    let menu;
-    switch (type) {
-      case "admin":
-        menu = getDisplayMenu(adminMenu);
-        break;
-      case "police":
-        menu = getDisplayMenu(policeMenu);
-        break;
-      default:
-        menu = getDisplayMenu(generalMenu);
-        break;
-    }
-    return menu;
-  };
+  const navigation = (_) => getDisplayMenu(menu);
 
-  return (
-    <ul className="navbar-nav me-auto mb-2 mb-lg-0">{navigation(type)}</ul>
-  );
+  return <ul className="navbar-nav me-auto mb-2 mb-lg-0">{navigation()}</ul>;
 }
 
 export default Menu;
