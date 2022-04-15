@@ -10,17 +10,18 @@ import StaffReport from "./views/StaffReport";
 import CriminalReport from "./views/CriminalReport";
 import Staff from "./views/Staff";
 import UserProfile from "./views/UserProfile";
+import Footer from "./components/Footer";
+import ChangePassword from "./views/ChangePassword";
 
-function Layout({ token, api }) {
+function Layout({ api, email }) {
   const { pathname } = useLocation();
   const { id } = useParams();
 
   const render = () => {
-    console.log("from render", pathname);
     let page;
     switch (pathname) {
       case "/dashboard":
-        page = <Home />;
+        page = <Home api={api} />;
         break;
 
       case "/dashboard/add-user":
@@ -56,6 +57,10 @@ function Layout({ token, api }) {
         page = <StaffReport api={api} />;
         break;
 
+      case "/dashboard/change_password":
+        page = <ChangePassword api={api} email={email} />;
+        break;
+
       default:
         page = (
           <h2 className="text-danger text-center">
@@ -69,10 +74,13 @@ function Layout({ token, api }) {
   };
 
   return (
-    <div className="section">
-      <Navbar />
-      {render()}
-    </div>
+    <>
+      <div className="section pb-5">
+        <Navbar />
+        {render()}
+      </div>
+      <Footer />
+    </>
   );
 }
 

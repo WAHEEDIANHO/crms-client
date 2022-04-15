@@ -7,26 +7,14 @@ function Menu() {
   // );
 
   const menu = [
-    { title: "FILE", path: "/" },
-    {
-      title: "SET UP",
-      path: "#",
-      role: [
-        { title: "NEW USER", path: "/dashboard/add-user" },
-        { title: "CRIME", path: "/dashboard/add_criminal" },
-      ],
-    },
-    {
-      title: sessionStorage.getItem("token") ? "LOGOUT" : "LOGIN",
-      path: sessionStorage.getItem("token") ? "/logout" : "/",
-    },
+    { title: "HOME", path: "/dashboard" },
     {
       title: "OPERATION",
       path: "#",
       role: [
         {
           title: "STAFF",
-          path: "/dashboard/add-user",
+          path: "#",
           isInnerRole: true,
           inner_role: [
             { title: "ADD STAFF", path: "/dashboard/add-staff" },
@@ -35,7 +23,7 @@ function Menu() {
         },
         {
           title: "CRIMINALS",
-          path: "",
+          path: "#",
           isInnerRole: true,
           inner_role: [
             { title: "ADD CRIMINAL", path: "/dashboard/add_criminal" },
@@ -46,13 +34,17 @@ function Menu() {
     },
     {
       title: "REPORT",
-      path: "#",
       role: [
         { title: "STAFF", path: "/dashboard/staff_report" },
         { title: "CRIMINALS", path: "/dashboard/criminals_report" },
       ],
     },
-    { title: "ABOUT", path: "/change_password" },
+    {
+      title: sessionStorage.getItem("token") ? "LOGOUT" : "LOGIN",
+      path: sessionStorage.getItem("token") ? "/logout" : "/",
+    },
+    { title: "ABOUT", path: "/about" },
+    { title: "CHANGE PASSWORD", path: "/dashboard/change_password" },
   ];
 
   const getDisplayMenu = (menuType) => {

@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 function Preloader() {
   const { pathname } = useLocation();
 
-  console.log(pathname);
-
   useEffect(() => {
     if (pathname === "/") {
       setTimeout(() => {

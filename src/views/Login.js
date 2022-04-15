@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 import "../css/login.css";
-function Login({ api }) {
+function Login({ api, setUser }) {
   const [login, setLogin] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -37,7 +37,8 @@ function Login({ api }) {
       let res = await axios.post(`${api}/user/login`, login);
       res = await res.data;
       sessionStorage.setItem("token", res.token);
-      sessionStorage.setItem("_id", res._id);
+      sessionStorage.setItem("id", res._id);
+      setUser(true, res._id);
     } catch (err) {
       setLogin({ username: "", password: "" });
       setIserror(true);

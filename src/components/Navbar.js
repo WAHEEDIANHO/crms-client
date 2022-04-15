@@ -19,7 +19,7 @@ function Navbar({ type }) {
   });
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <span className="text-success display-6">

@@ -1,11 +1,14 @@
+import { useLocation } from "react-router-dom";
+
 import EditBtn from "./EditBtn";
 import DeleteBtn from "./DeleteBtn";
 
 import "../css/criminal.css";
 
 function Card({ api, data, pre, handleDelete }) {
+  const { pathname } = useLocation();
   return (
-    <div className="col-md-3">
+    <div className="col-md-3 mb-4">
       <div className="card template-card">
         <div className="image">
           <img src={`${api}/${data.imageUrl}`} alt="profile" />
@@ -29,10 +32,14 @@ function Card({ api, data, pre, handleDelete }) {
           </div>
           <div className="description text-muted text-wrap">{data.address}</div>
         </div>
-        <div className="card-footer text-end">
-          <EditBtn pre={pre} id={data._id} />
-          <DeleteBtn id={data._id} handleDelete={handleDelete} />
-        </div>
+        {pathname !== "/dashboard" ? (
+          <div className="card-footer text-end">
+            <EditBtn pre={pre} id={data._id} />
+            {sessionStorage.getItem("isAdmin") === "true" ? (
+              <DeleteBtn id={data._id} handleDelete={handleDelete} />
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );

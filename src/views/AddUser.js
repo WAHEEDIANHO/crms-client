@@ -7,7 +7,6 @@ import Guide from "../components/Guide";
 
 import "../css/login.css";
 function AddCriminal({ title, api }) {
-  console.log("backend", api);
   const [user, setUser] = useState({});
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -33,6 +32,9 @@ function AddCriminal({ title, api }) {
         },
       })
       .then((res) => {
+        document.querySelector("[type=file]").value = "";
+        document.querySelector(".passport-holder img").setAttribute("src", "");
+        setFile(null);
         setUser({
           sname: "",
           othername: "",
@@ -58,8 +60,31 @@ function AddCriminal({ title, api }) {
       });
   };
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
+    if (!file) {
+      alert("select an Image first");
+      e.target.value = "";
+      return;
+    }
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleFileSelection = (e) => {
+    setFile(e.target.files[0]);
+
+    const input = e.target;
+    if (input.files && input.files[0]) {
+      let reader = new FileReader();
+
+      reader.onload = function (e) {
+        document
+          .querySelector("#user_image")
+          .setAttribute("src", e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
 
   return (
     <>
@@ -76,12 +101,12 @@ function AddCriminal({ title, api }) {
           <form className="row g-3" onSubmit={(e) => addUser(e)}>
             <div className="col-md-6 offset-md-3 mb-5">
               <div className="passport-holder">
-                <img src="/idp.jpg" alt="" />
+                <img src="#" alt="" id="user_image" />
                 <input
                   type="file"
                   name="file"
                   className="form-control"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  onChange={handleFileSelection}
                 />
               </div>
             </div>
@@ -95,7 +120,7 @@ function AddCriminal({ title, api }) {
                   className="form-control"
                   name="sname"
                   onChange={handleChange}
-                  value={user?.sname}
+                  value={user.sname ? user?.sname : ""}
                 />
               </div>
               <div className="col-md-4">
@@ -107,7 +132,7 @@ function AddCriminal({ title, api }) {
                   className="form-control"
                   onChange={handleChange}
                   name="othername"
-                  value={user?.othername}
+                  value={user.othername ? user?.othername : ""}
                 />
               </div>
               <div className="col-md-5">
@@ -119,7 +144,7 @@ function AddCriminal({ title, api }) {
                   className="form-control"
                   onChange={handleChange}
                   name="email"
-                  value={user?.email}
+                  value={user.email ? user?.email : ""}
                 />
               </div>
             </div>
@@ -134,7 +159,7 @@ function AddCriminal({ title, api }) {
                 onChange={handleChange}
                 id="nationality"
                 name="nationality"
-                value={user?.nationality}
+                value={user.nationality ? user?.nationality : ""}
               />
             </div>
             <div className="col-md-3">
@@ -147,7 +172,7 @@ function AddCriminal({ title, api }) {
                 onChange={handleChange}
                 id="city"
                 name="city"
-                value={user?.city}
+                value={user.city ? user?.city : ""}
               />
             </div>
             <div className="col-md-3">
@@ -159,7 +184,7 @@ function AddCriminal({ title, api }) {
                 name="state"
                 className="form-control"
                 onChange={handleChange}
-                value={user?.state}
+                value={user.state ? user?.state : ""}
               />
             </div>
             <div className="col-md-3">
@@ -172,7 +197,7 @@ function AddCriminal({ title, api }) {
                 onChange={handleChange}
                 id="dob"
                 name="dob"
-                value={user?.dob}
+                value={user.dob ? user?.dob : ""}
               />
             </div>
 
@@ -187,7 +212,7 @@ function AddCriminal({ title, api }) {
                 onChange={handleChange}
                 name="phone"
                 id="phone"
-                value={user?.phone}
+                value={user.phone ? user?.phone : ""}
               />
             </div>
             <div className="col-md-4">
@@ -198,10 +223,16 @@ function AddCriminal({ title, api }) {
               <input
                 type="number"
                 className="form-control"
-                onChange={handleChange}
+                onChange={(e) => {
+                  if (e.target.value > 8) {
+                    alert("value should be less than eight");
+                    e.target.value = "";
+                  }
+                  handleChange(e);
+                }}
                 name="height"
                 id="height"
-                value={user?.height}
+                value={user.height ? user?.height : ""}
               />
             </div>
             <div className="col-md-4">
@@ -215,7 +246,7 @@ function AddCriminal({ title, api }) {
                 onChange={handleChange}
                 name="weight"
                 id="weight"
-                value={user?.weight}
+                value={user.weight ? user?.weight : ""}
               />
             </div>
 
@@ -229,7 +260,7 @@ function AddCriminal({ title, api }) {
                 id="gender"
                 className="form-select"
                 onChange={handleChange}
-                value={user?.gender}
+                value={user.gender ? user?.gender : ""}
               >
                 <option value="">select gnder</option>
                 <option value="male">M</option>
@@ -246,7 +277,7 @@ function AddCriminal({ title, api }) {
                 id="marital_status"
                 className="form-select"
                 onChange={handleChange}
-                value={user?.marital_status}
+                value={user.marital_status ? user?.marital_status : ""}
               >
                 <option value="">marital status</option>
                 <option value="single">Single</option>
@@ -264,12 +295,11 @@ function AddCriminal({ title, api }) {
                 id="role"
                 className="form-select"
                 onChange={handleChange}
-                value={user?.role}
+                value={user.role ? user?.role : ""}
               >
                 <option value="">user role</option>
                 <option value="user">User</option>
                 <option value="staff">Staff</option>
-                <option value="admin">admin</option>
               </select>
             </div>
 
@@ -284,7 +314,7 @@ function AddCriminal({ title, api }) {
                 id="address"
                 name="address"
                 placeholder="1234 Main St"
-                value={user?.address}
+                value={user.address ? user?.address : ""}
               />
             </div>
             <div className="col-12">

@@ -4,16 +4,17 @@ import axios from "axios";
 import Report from "../components/Report";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-
+import Search from "../components/Search";
 import Guide from "../components/Guide";
 
 class CriminalReport extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { criminals: [], loading: false };
+    this.state = { criminals: [], loading: false, search: "" };
 
     this.handleDelete = this.handleDelete.bind(this);
+    this.handeleSearch = this.handeleSearch.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +63,19 @@ class CriminalReport extends React.Component {
       .catch((err) => console.log(err));
   }
 
+  handeleSearch(e) {
+    this.setState({ search: e.target.value });
+  }
+
+  filterList(search) {
+    let result = this.state.criminals.filter(
+      ({ sname, othername }) =>
+        sname.toLowerCase().includes(search.toLowerCase()) ||
+        othername.toLowerCase().includes(search.toLowerCase())
+    );
+    return result;
+  }
+
   renderReport = () => (
     <table className="table align-middle mb-0 bg-white">
       <thead className="bg-light">
@@ -75,7 +89,7 @@ class CriminalReport extends React.Component {
       </thead>
       <tbody>
         {this.state.criminals.length !== 0 ? (
-          this.state.criminals.map((criminal, i) => (
+          this.filterList(this.state.search).map((criminal, i) => (
             <Report
               data={criminal}
               key={i}
@@ -105,7 +119,10 @@ class CriminalReport extends React.Component {
           </h3>
           <p className="mb-4">Crime Managemen System</p>
         </Guide>
-        <div className="container">{this.renderReport()}</div>
+        <div className="container">
+          <Search handeleSearch={this.handeleSearch} />
+          {this.renderReport()}
+        </div>
       </>
     );
   }

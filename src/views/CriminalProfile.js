@@ -92,6 +92,7 @@ class CriminalProfile extends React.Component {
                     src={`${this.props.api}/${criminal.imageUrl}`}
                   />
                   <span className="h4">{criminal.sname}</span>
+                  <span className="h5">{criminal.criminal_id}</span>
                   <span className="text-muted">{criminal.email}</span>
                 </div>
               </div>
@@ -130,6 +131,7 @@ class CriminalProfile extends React.Component {
                         name="email"
                         onChange={this.handleInputChange}
                         value={criminal.email ? criminal.email : ""}
+                        disabled
                       />
                     </div>
                     <div className="col-md-6">

@@ -1,17 +1,58 @@
-import { Navigate } from "react-router-dom";
+import { Component } from "react";
+import axios from "axios";
 
 import Carousel from "../components/Carousel";
-import Criminals from "./Criminals";
+// import Criminals from "./Criminals";
+import Card from "../components/TemplateCard";
 
-function Home() {
-  if (!sessionStorage.getItem("token")) return <Navigate to="/" />;
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      criminals: null,
+    };
+  }
 
-  return (
-    <header className="w-100">
-      <Carousel />
-      <Criminals filter={true} title="Wanted Criminals" />
-    </header>
-  );
+  componentDidMount() {
+    (async () => {
+      axios
+        .get(`${this.props.api}/criminal?`, {
+          headers: {
+            authorization: `bearer ${sessionStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => res.data)
+        .then(({ data }) => {
+          const toNumber = (el) => parseInt(el?.slice(4));
+          const criminals = data.sort(
+            (a, b) => toNumber(b.criminal_id) - toNumber(a.criminal_id)
+          );
+          this.setState({ criminals });
+          // setCriminal(criminals);
+        })
+        .catch((err) => console.log(err));
+    })();
+  }
+  render() {
+    const { criminals } = this.state;
+    return (
+      <header className="w-100">
+        <Carousel />
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <h3 className="text-center mb-4">New Criminals</h3>
+            {criminals
+              ? criminals.map((criminal, i) => {
+                  if (i === 4) return;
+                  return <Card data={criminal} api={this.props.api} key={i} />;
+                })
+              : null}
+          </div>
+        </div>
+        {/* <Criminals filter={true} title="Wanted Criminals" /> */}
+      </header>
+    );
+  }
 }
 
 export default Home;

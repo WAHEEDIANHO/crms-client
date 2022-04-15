@@ -4,16 +4,17 @@ import axios from "axios";
 import Report from "../components/Report";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-
+import Search from "../components/Search";
 import Guide from "../components/Guide";
 
 class StaffReport extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { users: [], loading: false };
+    this.state = { users: [], loading: false, search: "" };
 
     this.handleDelete = this.handleDelete.bind(this);
+    this.handeleSearch = this.handeleSearch.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +65,19 @@ class StaffReport extends React.Component {
       .catch((err) => console.log(err));
   }
 
+  handeleSearch(e) {
+    this.setState({ search: e.target.value });
+  }
+
+  filterList(search) {
+    let result = this.state.users.filter(
+      ({ sname, othername }) =>
+        sname.toLowerCase().includes(search.toLowerCase()) ||
+        othername.toLowerCase().includes(search.toLowerCase())
+    );
+    return result;
+  }
+
   renderReport = () => (
     <table className="table align-middle mb-0 bg-white">
       <thead className="bg-light">
@@ -77,7 +91,7 @@ class StaffReport extends React.Component {
       </thead>
       <tbody>
         {this.state.users.length !== 0 ? (
-          this.state.users.map((user, i) => (
+          this.filterList(this.state.search).map((user, i) => (
             <Report
               data={user}
               key={i}
@@ -107,7 +121,11 @@ class StaffReport extends React.Component {
           </h3>
           <p className="mb-4">Crime Managemen System</p>
         </Guide>
-        <div className="container">{this.renderReport()}</div>
+
+        <div className="container">
+          <Search handeleSearch={this.handeleSearch} />
+          {this.renderReport()}
+        </div>
       </>
     );
   }

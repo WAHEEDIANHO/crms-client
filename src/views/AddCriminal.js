@@ -48,6 +48,9 @@ function AddCriminal({ api }) {
         },
       })
       .then((res) => {
+        document.querySelector("[type=file]").value = "";
+        document.querySelector(".passport-holder img").setAttribute("src", "");
+        setFile(null);
         setCriminal({
           address: "",
           city: "",
@@ -79,11 +82,34 @@ function AddCriminal({ api }) {
       });
   };
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
+    if (!file) {
+      alert("select an Image first");
+      e.target.value = "";
+      return;
+    }
     setCriminal({
       ...criminal,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleFileSelection = (e) => {
+    setFile(e.target.files[0]);
+
+    const input = e.target;
+    if (input.files && input.files[0]) {
+      let reader = new FileReader();
+
+      reader.onload = function (e) {
+        document
+          .querySelector("#criminal_image")
+          .setAttribute("src", e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
 
   return (
     <>
@@ -102,12 +128,13 @@ function AddCriminal({ api }) {
             <div className="row align-items-center mb-5">
               <div className="col-md-6">
                 <div className="passport-holder">
-                  <img src="/idp.jpg" alt="" />
+                  <img src="#" alt="" id="criminal_image" />
                   <input
                     type="file"
                     name="file"
                     className="form-control"
-                    onChange={(e) => setFile(e.target.files[0])}
+                    onChange={handleFileSelection}
+                    style={{ position: "absolute", bottom: "-10px" }}
                   />
                 </div>
               </div>
@@ -136,7 +163,7 @@ function AddCriminal({ api }) {
                   className="form-control"
                   name="sname"
                   onChange={handleChange}
-                  value={criminal?.sname}
+                  value={criminal.sname ? criminal?.sname : ""}
                 />
               </div>
               <div className="col-md-4">
@@ -148,7 +175,7 @@ function AddCriminal({ api }) {
                   className="form-control"
                   name="othername"
                   onChange={handleChange}
-                  value={criminal?.othername}
+                  value={criminal.othername ? criminal?.othername : ""}
                 />
               </div>
               <div className="col-md-5">
@@ -160,7 +187,7 @@ function AddCriminal({ api }) {
                   className="form-control"
                   name="email"
                   onChange={handleChange}
-                  value={criminal?.email}
+                  value={criminal.email ? criminal?.email : ""}
                 />
               </div>
             </div>
@@ -175,7 +202,7 @@ function AddCriminal({ api }) {
                 id="nation"
                 name="nationality"
                 onChange={handleChange}
-                value={criminal?.nationality}
+                value={criminal.nationality ? criminal?.nationality : ""}
               />
             </div>
             <div className="col-md-3">
@@ -188,7 +215,7 @@ function AddCriminal({ api }) {
                 id="state"
                 name="state"
                 onChange={handleChange}
-                value={criminal?.state}
+                value={criminal.state ? criminal?.state : ""}
               />
             </div>
             <div className="col-md-3">
@@ -201,7 +228,7 @@ function AddCriminal({ api }) {
                 id="city"
                 name="city"
                 onChange={handleChange}
-                value={criminal?.city}
+                value={criminal.city ? criminal?.city : ""}
               />
             </div>
             <div className="col-md-3">
@@ -214,7 +241,7 @@ function AddCriminal({ api }) {
                 id="dob"
                 name="dob"
                 onChange={handleChange}
-                value={criminal?.dob}
+                value={criminal.dob ? criminal?.dob : ""}
               />
             </div>
 
@@ -229,7 +256,7 @@ function AddCriminal({ api }) {
                 name="phone"
                 id="phone"
                 onChange={handleChange}
-                value={criminal?.phone}
+                value={criminal.phone ? criminal?.phone : ""}
               />
             </div>
             <div className="col-md-4">
@@ -242,8 +269,15 @@ function AddCriminal({ api }) {
                 className="form-control"
                 name="height"
                 id="height"
-                onChange={handleChange}
-                value={criminal?.height}
+                onChange={(e) => {
+                  if (e.target.value > 8) {
+                    alert("value should be less than eight");
+                    e.target.value = "";
+                  }
+                  handleChange(e);
+                }}
+                value={criminal.height ? criminal?.height : ""}
+                max="8"
               />
             </div>
             <div className="col-md-4">
@@ -257,7 +291,7 @@ function AddCriminal({ api }) {
                 name="weight"
                 id="weight"
                 onChange={handleChange}
-                value={criminal?.weight}
+                value={criminal.weight ? criminal?.weight : ""}
               />
             </div>
 
@@ -271,7 +305,7 @@ function AddCriminal({ api }) {
                 id="gender"
                 className="form-select"
                 onChange={handleChange}
-                value={criminal?.gender}
+                value={criminal.gender ? criminal?.gender : ""}
               >
                 <option value="">select gender</option>
                 <option value="male">M</option>
@@ -288,7 +322,7 @@ function AddCriminal({ api }) {
                 id="marital_status"
                 className="form-select"
                 onChange={handleChange}
-                value={criminal?.marital_status}
+                value={criminal.marital_status ? criminal?.marital_status : ""}
               >
                 <option value="">Marital status</option>
                 <option value="single">Single</option>
@@ -307,7 +341,7 @@ function AddCriminal({ api }) {
                 name="crime"
                 id="crime"
                 onChange={handleChange}
-                value={criminal?.crime}
+                value={criminal.crime ? criminal?.crime : ""}
               />
             </div>
 
@@ -322,7 +356,7 @@ function AddCriminal({ api }) {
                 name="address"
                 placeholder="1234 Main St"
                 onChange={handleChange}
-                value={criminal?.address}
+                value={criminal.address ? criminal?.address : ""}
               />
             </div>
 
@@ -336,7 +370,7 @@ function AddCriminal({ api }) {
                 id="officer"
                 name="officer"
                 onChange={handleChange}
-                value={criminal?.officer}
+                value={criminal.officer ? criminal?.officer : ""}
               />
             </div>
 
@@ -350,7 +384,9 @@ function AddCriminal({ api }) {
                 id="sentence_duration"
                 name="sentence_duration"
                 onChange={handleChange}
-                value={criminal?.sentence_duration}
+                value={
+                  criminal.sentence_duration ? criminal?.sentence_duration : ""
+                }
               />
             </div>
 
@@ -364,7 +400,7 @@ function AddCriminal({ api }) {
                 id="dos"
                 name="dos"
                 onChange={handleChange}
-                value={criminal?.dos}
+                value={criminal.dos ? criminal?.dos : ""}
               />
             </div>
 
@@ -378,7 +414,7 @@ function AddCriminal({ api }) {
                 id="dod"
                 name="dod"
                 onChange={handleChange}
-                value={criminal?.dod}
+                value={criminal.dod ? criminal?.dod : ""}
               />
             </div>
 
@@ -395,7 +431,7 @@ function AddCriminal({ api }) {
                   id="nok_name"
                   name="nok_name"
                   onChange={handleChange}
-                  value={criminal?.nok_name}
+                  value={criminal.nok_name ? criminal?.nok_name : ""}
                 />
               </div>
 
@@ -409,7 +445,7 @@ function AddCriminal({ api }) {
                   id="nok_no"
                   name="nok_no"
                   onChange={handleChange}
-                  value={criminal?.nok_no}
+                  value={criminal.nok_no ? criminal?.nok_no : ""}
                 />
               </div>
 
@@ -423,7 +459,7 @@ function AddCriminal({ api }) {
                   id="nok_rel"
                   name="nok_rel"
                   onChange={handleChange}
-                  value={criminal?.nok_rel}
+                  value={criminal.nok_rel ? criminal?.nok_rel : ""}
                 />
               </div>
             </div>

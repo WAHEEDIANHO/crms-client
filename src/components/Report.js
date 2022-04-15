@@ -35,7 +35,9 @@ function Report({ data, api, pre, handleDelete }) {
       <td>{data.hasOwnProperty("role") ? data.role : data.crime}</td>
       <td>
         <EditBtn pre={pre} id={data._id} />
-        <DeleteBtn id={data._id} handleDelete={handleDelete} />
+        {sessionStorage.getItem("isAdmin") === "true" ? (
+          <DeleteBtn id={data._id} handleDelete={handleDelete} />
+        ) : null}
       </td>
     </tr>
   );
