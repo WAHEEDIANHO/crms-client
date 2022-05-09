@@ -75,6 +75,7 @@ function AddCriminal({ api }) {
           weight: "",
         });
         setLoader(false);
+        alert("New Criminal added successfully");
       })
       .catch((err) => {
         alert("oops! error while submitting form \n please try again");

@@ -53,6 +53,7 @@ function AddCriminal({ title, api }) {
           marital_status: "",
         });
         setLoader(false);
+        alert("New User added successfully");
       })
       .catch((err) => {
         alert("oops! error while submitting form \n please try again");
