@@ -84,6 +84,7 @@ class App extends Component {
               path="/dashboard/staff_report"
               element={<Layout api={api} />}
             />
+            <Route path="/about" element={<Layout />} />
             <Route
               path="/dashboard/change_password"
               element={<Layout api={api} email={user?.email} />}

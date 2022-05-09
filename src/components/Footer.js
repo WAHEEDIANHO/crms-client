@@ -26,7 +26,7 @@ function Footer() {
       >
         2022 Criminal Management Sysytem <br />
         HC20195468635 <br />
-        Supervised By <strong>MR.Chris</strong>
+        Supervised By <strong>MR.NWAEKPE OGBONNA CHRISTANAH</strong>
       </div>
       {/* <!-- Copyright --> */}
     </footer>

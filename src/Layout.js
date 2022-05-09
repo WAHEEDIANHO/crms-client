@@ -12,6 +12,7 @@ import Staff from "./views/Staff";
 import UserProfile from "./views/UserProfile";
 import Footer from "./components/Footer";
 import ChangePassword from "./views/ChangePassword";
+import About from "./views/About";
 
 function Layout({ api, email }) {
   const { pathname } = useLocation();
@@ -59,6 +60,10 @@ function Layout({ api, email }) {
 
       case "/dashboard/change_password":
         page = <ChangePassword api={api} email={email} />;
+        break;
+
+      case "/about":
+        page = <About api={api} email={email} />;
         break;
 
       default:
