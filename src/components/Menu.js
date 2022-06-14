@@ -28,7 +28,7 @@ function Menu() {
           inner_role: [
             { title: "ADD CRIMINAL", path: "/dashboard/add_criminal" },
             { title: "CRIMINALS", path: "/dashboard/criminal" },
-          ],
+          ], 
         },
       ],
     },
@@ -43,7 +43,6 @@ function Menu() {
       title: sessionStorage.getItem("token") ? "LOGOUT" : "LOGIN",
       path: sessionStorage.getItem("token") ? "/logout" : "/",
     },
-    { title: "ABOUT", path: "/about" },
     { title: "CHANGE PASSWORD", path: "/dashboard/change_password" },
   ];
 
