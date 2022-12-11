@@ -18,8 +18,8 @@ class App extends Component {
     this.state = {
       user: null,
       token: sessionStorage.getItem("token"),
-      // api: "https://crms-api.herokuapp.com/api/v1", //"http://localhost:7700/api/v1";
-      api: "http://localhost:7700/api/v1", //"http://localhost:7700/api/v1";
+      api: "https://crms-api.onrender.com/api/v1", //"http://localhost:7700/api/v1";
+      // api: "http://localhost:7700/api/v1", //"http://localhost:7700/api/v1";
     };
   }
 
