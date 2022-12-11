@@ -43,7 +43,7 @@ class Home extends Component {
             <h3 className="text-center mb-4">New Criminals</h3>
             {criminals
               ? criminals.map((criminal, i) => {
-                  if (i === 4) return;
+                  if (i === 4) return null;
                   return <Card data={criminal} api={this.props.api} key={i} />;
                 })
               : null}

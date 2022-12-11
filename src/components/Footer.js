@@ -25,8 +25,8 @@ function Footer() {
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
         2022 Criminal Management Sysytem <br />
-        HC20190106303 <br />
-        Supervised By <strong>MR.NWAEKPE OGBONNA CHRISTANAH</strong>
+        {/*HC20190106303 <br />*/}
+        {/*Supervised By <strong>MR.NWAEKPE OGBONNA CHRISTANAH</strong>*/}
       </div>
       {/* <!-- Copyright --> */}
     </footer>

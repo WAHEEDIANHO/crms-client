@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+// import { useState } from "react";
 
 import Login from "./views/Login";
 import Preloader from "./components/Preloader";
@@ -18,13 +18,26 @@ class App extends Component {
     this.state = {
       user: null,
       token: sessionStorage.getItem("token"),
-      api: "https://crms-api.herokuapp.com/api/v1", //"http://localhost:7700/api/v1";
+      // api: "https://crms-api.herokuapp.com/api/v1", //"http://localhost:7700/api/v1";
+      api: "http://localhost:7700/api/v1", //"http://localhost:7700/api/v1";
     };
   }
 
   componentDidMount() {
     if (this.state.token)
       this.setCurrentUser(true, sessionStorage.getItem("id"));
+
+    axios
+      .post("http://localhost:3000/user", {
+        firstname: "waheed",
+        lastname: "safiu",
+        email: "wa@gmail.com",
+        roll: "dev",
+      })
+      .then(() => console.log("posted succesfully"))
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   setCurrentUser = (state = false, id) => {
@@ -47,7 +60,7 @@ class App extends Component {
     const { token, api, user } = this.state;
     return (
       <Router>
-        <Preloader />
+        {/*<Preloader />*/}
         <Routes>
           <Route
             path="/"
